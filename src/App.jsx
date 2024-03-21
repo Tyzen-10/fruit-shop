@@ -46,6 +46,28 @@ function App() {
   //Function - When Cart Quantity is adjusted.
   function onUpdateItemQuantity(id,change){
     console.log(id,change,"update item quantity function working.")
+    //getting existing cartItems:
+    setItems((prevItems)=>{
+      //using the name-> exisitingCart instead of UpdatedItems(from above function.)
+      const existingCart = [...prevItems]
+      const existingItemIndex = items.findIndex(item=>item.id==id)
+      //updating the quantity property.
+      const existingCartItem = existingCart[existingItemIndex]
+      const updatedItem = {
+        ...existingCartItem,
+      }
+      updatedItem.quantity+=change
+      //now check if updatedItem.quantity is 0 or less
+      if(updatedItem.quantity<=0){
+        //1
+        existingCart.splice(existingItemIndex,1)
+      }
+      else{
+        //2
+        existingCart[existingItemIndex] = updatedItem
+      }
+      return existingCart
+    })
   }
   const cartModal = useRef()
   const openCart = ()=>{
